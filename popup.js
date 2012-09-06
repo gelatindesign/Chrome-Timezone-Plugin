@@ -28,13 +28,13 @@ document.addEventListener( 'DOMContentLoaded', function( ) {
 			}
 			pattern = pattern.split( 'list_abbr' ).join( list_abbr );
 
-			console.log(pattern);
+			// console.log(pattern);
 
 			var regex = new RegExp( pattern, 'i' );
 
 			var matches = regex.exec( time );
 
-			console.log(matches);
+			// console.log(matches);
 
 			var abbr1 = matches[1];
 			var hours = matches[3];
@@ -79,7 +79,7 @@ document.addEventListener( 'DOMContentLoaded', function( ) {
 				var abbr = abbr2.toUpperCase();
 			}
 
-			console.log(timenum+' '+abbr);
+			// console.log(timenum+' '+abbr);
 
 			// Convert to UTC
 			var timenum_utc = false;
@@ -87,28 +87,78 @@ document.addEventListener( 'DOMContentLoaded', function( ) {
 			for ( i=0; i<timezones.length; i++ ) {
 				if (timezones[i][0] == abbr) { 
 					timezone = timezones[i];
-					timenum_utc = timenum + timezones[i][2];
+					timenum_utc = timenum - timezones[i][2];
 					hours_utc = parseInt(timenum_utc);
-					minutes_utc = (timenum_utc - hours_utc) * 60;
+					minutes_utc = Math.round((timenum_utc - hours_utc) * 60);
 					break;
 				}
 			}
 
 			if (timezone !== false) {
-				console.log(timenum_utc+' UTC');
+				// console.log(timenum_utc+' UTC');
 
-				document.querySelector('#selected-time').innerHTML = padLeft(hours, 2, '0')+':'+padLeft(minutes, 2, '0')+' '+timezone[0];
+				document.querySelector('#selected-time').innerHTML = padLeft(hours, 2, '0')+':'+padLeft(Math.round(minutes), 2, '0')+' '+timezone[0];
 				document.querySelector('#selected-timezone').innerHTML = timezone[1];
 
 				document.querySelector('#utc-time').innerHTML = padLeft(hours_utc, 2, '0')+':'+padLeft(minutes_utc, 2, '0')+' UTC';
 				document.querySelector('#utc-timezone').innerHTML = 'Universal Time Coordinated';
 
-				//for ( i=0; i<timezones.length; i++ ) {
+				var groups = document.getElementById('time-groups');
+				var selectbox = document.querySelector('#settings select');
 
-				//}
+				for ( i=0; i<timezones.length; i++ ) {
+					var timenum_t = timenum + timezones[i][2] - timezone[2];
+					var hours_t = parseInt(timenum_t);
+					var minutes_t = Math.round((timenum_t - hours_t) * 60);
+
+					var t  = '<div class="time-group local '+timezones[i][0]+'"';
+
+					if (timezones[i][0] != localStorage.local_timezone) {
+						t += ' style="display: none;"';
+					}
+
+						t += '>';
+						t += '<h2 class="time">'+padLeft(hours_t, 2, '0')+':'+padLeft(minutes_t, 2, '0')+' '+timezones[i][0]+'</h2>';
+						t += '<p class="timezone">'+timezones[i][1]+'</p>';
+						t += '</div>';
+
+					groups.innerHTML += t;
+
+					selectbox.innerHTML += '<option value="'+timezones[i][0]+'">'+timezones[i][0]+' - '+timezones[i][1]+'</option>';
+				}
 			}
 		});
 	});
+
+	if (!localStorage.local_timezone || localStorage.local_timezone == '') {
+		localStorage.local_timezone = 'GMT';
+	}
+	
+	var selectbox = document.querySelector('#settings select');
+	selectbox.addEventListener('change', function(event) {
+
+		var local_timezones = document.querySelectorAll('.local');
+		for (var i=0; i<local_timezones.length; i++) {
+			local_timezones[i].style.display = 'none';
+		}
+
+		for (var i=0; i<event.target.length; i++) {
+			if (event.target[i].selected) {
+				var timegroup = document.querySelector('#time-groups .'+event.target[i].value);
+				timegroup.style.display = 'block';
+				localStorage.local_timezone = event.target[i].value;
+				break;
+			}
+		}
+
+	});
+
+	var options = selectbox.getElementsByTagName('option');
+	for (var i=0; i<options.length; i++) {
+		options.selected = (options.value == localStorage.local_timezone) ? true : false;
+	}
+	selectbox.value = localStorage.local_timezone;
+
 });
 
 function padLeft( string, width, pad_str ) {

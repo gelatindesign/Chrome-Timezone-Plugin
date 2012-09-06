@@ -44,6 +44,19 @@
 			.time-group .utc {
 				color: #666666;
 			}
+
+			#settings {
+				border-top: 2px solid #999999;
+			}
+
+			#settings h3 {
+				font-size: 14px;
+				font-weight: bold;
+			}
+
+			#settings select {
+				width: 90%;
+			}
 		</style>
 
 		<script src="timezones.js"></script>
@@ -53,7 +66,7 @@
 		<div id="wrapper">
 			<div id="time-groups">
 				<div class="time-group">
-					<h2 id="selected-time" class="time"></h2>
+					<h2 id="selected-time" class="time">Calculating time differences...</h2>
 					<p id="selected-timezone" class="timezone"></p>
 				</div>
 
@@ -62,6 +75,15 @@
 					<p id="utc-timezone" class="timezone"></p>
 				</div>
 			</div>
+
+			<div id="settings">
+				<h3>Settings</h3>
+				<p>
+					Local Timezone:
+					<select name="local_timezone">
+						<option value="">-- Select a timezone --</option>
+					</select>
+				</p>
 		</div>
 	</body>
 </html>
