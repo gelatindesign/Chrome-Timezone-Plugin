@@ -1,0 +1,24 @@
+{
+	"name": "Timezone Converter",
+	"version": "0.1",
+	"manifest_version": 2,
+
+	"description": "Shows a conversion of times in the webpage to your current timezone",
+
+	"permissions": [
+		"tabs"
+	],
+
+	"browser_action": {
+		"default_icon": "icon.png",
+		"default_title": "Timezone Converter",
+		"default_popup": "popup.htm"
+	},
+
+	"content_scripts": [
+		{
+			"matches": ["http://*/*"],
+			"js": ["content.js"]
+		}
+	]
+}

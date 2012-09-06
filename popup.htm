@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Timezone Converter</title>
+
+		<style>
+			body {
+				font-family: "Helvetica", "Arial", sans-serif;
+				font-size: 14px;
+				line-height: 1.2em;
+				color: #333333;
+			}
+
+			#wrapper {
+				width: 400px;
+			}
+
+			strong {
+				font-weight: bold;
+			}
+
+			p {
+				margin: 0 0 10px 0;
+			}
+
+			.time-group {
+				border-bottom: 1px solid #CCCCCC;
+			}
+
+			.time-group:last-child {
+				border-bottom: 0;
+			}
+
+			.time-group h2 {
+				font-size: 16px;
+				font-weight: bold;
+			}
+
+			.time-group .timezone {
+				font-size: 11px;
+				color: #666666;
+			}
+
+			.time-group .utc {
+				color: #666666;
+			}
+		</style>
+
+		<script src="timezones.js"></script>
+		<script src="popup.js"></script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="time-groups">
+				<div class="time-group">
+					<h2 id="selected-time" class="time"></h2>
+					<p id="selected-timezone" class="timezone"></p>
+				</div>
+
+				<div class="time-group">
+					<h2 id="utc-time" class="time"></h2>
+					<p id="utc-timezone" class="timezone"></p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
